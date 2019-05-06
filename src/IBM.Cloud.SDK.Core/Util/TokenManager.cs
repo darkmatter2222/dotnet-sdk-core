@@ -19,6 +19,8 @@ using IBM.Cloud.SDK.Core.Http;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace IBM.Cloud.SDK.Core.Util
 {
@@ -52,7 +54,38 @@ namespace IBM.Cloud.SDK.Core.Util
         /// 4. If this class is managing tokens and has a valid token stored, send it
         /// </summary>
         /// <returns>An IamTokenData object containing the IAM token.</returns>
-        public string GetToken()
+        //public string GetToken()
+        //{
+        //    if (!string.IsNullOrEmpty(_userAccessToken))
+        //    {
+        //        // 1. use user-managed token
+        //        return _userAccessToken;
+        //    }
+        //    else if (!string.IsNullOrEmpty(_tokenInfo.AccessToken) || IsRefreshTokenExpired())
+        //    {
+        //        // 2. request an initial token
+        //        var tokenResponse = RequestToken();
+        //        SaveTokenInfo(tokenResponse.Result);
+        //        return _tokenInfo.AccessToken;
+        //    }
+        //    else if (this.IsTokenExpired())
+        //    {
+        //        // 3. refresh a token
+        //        var tokenResponse = RefreshToken();
+        //        SaveTokenInfo(tokenResponse.Result);
+        //        return _tokenInfo.AccessToken;
+        //    }
+        //    else
+        //    {
+        //        // 4. use valid managed token
+        //        return _tokenInfo.AccessToken;
+        //    }
+        //}
+
+        [Obsolete("This method is obsolete. Use GetTokenAsync instead.")]
+        public string GetToken() => GetTokenAsync().Result;
+
+        public async Task<string> GetTokenAsync(CancellationToken cancellation = default(CancellationToken))
         {
             if (!string.IsNullOrEmpty(_userAccessToken))
             {
@@ -62,15 +95,15 @@ namespace IBM.Cloud.SDK.Core.Util
             else if (!string.IsNullOrEmpty(_tokenInfo.AccessToken) || IsRefreshTokenExpired())
             {
                 // 2. request an initial token
-                var tokenResponse = RequestToken();
-                SaveTokenInfo(tokenResponse.Result);
+                var tokenInfo = await RequestTokenAsync(cancellation);
+                SaveTokenInfo(tokenInfo);
                 return _tokenInfo.AccessToken;
             }
             else if (this.IsTokenExpired())
             {
                 // 3. refresh a token
-                var tokenResponse = RefreshToken();
-                SaveTokenInfo(tokenResponse.Result);
+                var tokenInfo = await RefreshTokenAsync(cancellation);
+                SaveTokenInfo(tokenInfo);
                 return _tokenInfo.AccessToken;
             }
             else
@@ -79,7 +112,7 @@ namespace IBM.Cloud.SDK.Core.Util
                 return _tokenInfo.AccessToken;
             }
         }
-
+        
         /// <summary>
         /// Set a self-managed IAM access token.
         /// The access token should be valid and not yet expired.
@@ -137,6 +170,44 @@ namespace IBM.Cloud.SDK.Core.Util
             return result;
         }
 
+        private async Task<IamTokenData> RequestTokenAsync(CancellationToken cancellation)
+        {
+            DetailedResponse<IamTokenData> result = null;
+
+            try
+            {
+                if (string.IsNullOrEmpty(_iamApikey))
+                    throw new ArgumentNullException(nameof(_iamApikey));
+
+                var request = this.Client.PostAsync(_iamUrl);
+                request.WithHeader("Content-type", "application/x-www-form-urlencoded");
+                request.WithHeader("Authorization", "Basic Yng6Yng=");
+
+                List<KeyValuePair<string, string>> content = new List<KeyValuePair<string, string>>();
+                KeyValuePair<string, string> grantType = new KeyValuePair<string, string>("grant_type", "urn:ibm:params:oauth:grant-type:apikey");
+                KeyValuePair<string, string> responseType = new KeyValuePair<string, string>("response_type", "cloud_iam");
+                KeyValuePair<string, string> apikey = new KeyValuePair<string, string>("apikey", _iamApikey);
+                content.Add(grantType);
+                content.Add(responseType);
+                content.Add(apikey);
+
+                var formData = new FormUrlEncodedContent(content);
+
+                request.WithBodyContent(formData);
+
+                result = await request.AsAsync<IamTokenData>(cancellation);
+
+                if (result == null)
+                    result = new DetailedResponse<IamTokenData>();
+            }
+            catch (AggregateException ae)
+            {
+                throw ae.Flatten();
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Refresh an IAM token using a refresh token.
         /// </summary>
@@ -164,6 +235,42 @@ namespace IBM.Cloud.SDK.Core.Util
                 request.WithBodyContent(formData);
 
                 result = request.As<IamTokenData>().Result;
+
+                if (result == null)
+                    result = new DetailedResponse<IamTokenData>();
+            }
+            catch (AggregateException ae)
+            {
+                throw ae.Flatten();
+            }
+
+            return result;
+        }
+
+        private async Task<IamTokenData> RefreshTokenAsync(CancellationToken cancellation)
+        {
+            DetailedResponse<IamTokenData> result = null;
+
+            try
+            {
+                if (string.IsNullOrEmpty(_tokenInfo.RefreshToken))
+                    throw new ArgumentNullException(nameof(_tokenInfo.RefreshToken));
+
+                var request = this.Client.PostAsync(_iamUrl);
+                request.WithHeader("Content-type", "application/x-www-form-urlencoded");
+                request.WithHeader("Authorization", "Basic Yng6Yng=");
+
+                List<KeyValuePair<string, string>> content = new List<KeyValuePair<string, string>>();
+                KeyValuePair<string, string> grantType = new KeyValuePair<string, string>("grant_type", "urn:ibm:params:oauth:grant-type:apikey");
+                KeyValuePair<string, string> responseType = new KeyValuePair<string, string>("response_type", "cloud_iam");
+                content.Add(grantType);
+                content.Add(responseType);
+
+                var formData = new FormUrlEncodedContent(content);
+
+                request.WithBodyContent(formData);
+
+                result = await request.AsAsync<IamTokenData>(cancellation);
 
                 if (result == null)
                     result = new DetailedResponse<IamTokenData>();

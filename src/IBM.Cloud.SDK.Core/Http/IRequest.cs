@@ -21,6 +21,8 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace IBM.Cloud.SDK.Core.Http
 {
@@ -45,6 +47,8 @@ namespace IBM.Cloud.SDK.Core.Http
         IRequest WithCustom(Action<HttpRequestMessage> request);
 
         IRequest WithFormatter(MediaTypeHeaderValue contentType);
+
+        Task<T> AsAsync<T>(this IRequest request, CancellationToken cancellation = default(CancellationToken));
 
         TaskAwaiter<IResponse> GetAwaiter();
     }

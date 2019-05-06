@@ -25,6 +25,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using IBM.Cloud.SDK.Core.Http.Extensions;
 using IBM.Cloud.SDK.Core.Http.Filters;
@@ -51,7 +52,7 @@ namespace IBM.Cloud.SDK.Core.Http
             this.Filters = filters;
             this.Message.Headers.Accept.Clear();
         }
-        
+
         public IRequest WithBody<T>(T body, MediaTypeHeaderValue contentType = null)
         {
             MediaTypeFormatter formatter = HttpFactory.GetFormatter(this.Formatters, contentType);
@@ -109,7 +110,7 @@ namespace IBM.Cloud.SDK.Core.Http
             this.Formatters.JsonFormatter.SupportedMediaTypes.Add(contentType);
             return this;
         }
-        
+
         public TaskAwaiter<IResponse> GetAwaiter()
         {
             Func<Task<IResponse>> waiter = async () =>
@@ -169,6 +170,13 @@ namespace IBM.Cloud.SDK.Core.Http
             Stream stream = await message.Content.ReadAsStreamAsync().ConfigureAwait(false);
             stream.Position = 0;
             return stream;
+        }
+
+        public Task<T> AsAsync<T>(this IRequest request, CancellationToken cancellation = default(CancellationToken))
+        {
+            HttpResponseMessage message = await this.AsMessage().ConfigureAwait(false);
+            Task<T> task = new Task<T>(request, cancellationToken);
+            return task;
         }
 
         private async Task<HttpResponseMessage> GetResponse(Task<HttpResponseMessage> request)
