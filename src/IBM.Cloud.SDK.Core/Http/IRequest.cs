@@ -48,7 +48,7 @@ namespace IBM.Cloud.SDK.Core.Http
 
         IRequest WithFormatter(MediaTypeHeaderValue contentType);
 
-        Task<T> AsAsync<T>(this IRequest request, CancellationToken cancellation = default(CancellationToken));
+        Task<T> AsAsync<T>(this IRequest request, CancellationToken cancellationToken = default(CancellationToken));
 
         TaskAwaiter<IResponse> GetAwaiter();
     }

@@ -172,11 +172,23 @@ namespace IBM.Cloud.SDK.Core.Http
             return stream;
         }
 
-        public Task<T> AsAsync<T>(this IRequest request, CancellationToken cancellation = default(CancellationToken))
+        //public Task<T> AsAsync<T>(this IRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        //{
+        //    //HttpResponseMessage message = await this.AsMessage().ConfigureAwait(false);
+        //    //Task<T> task = new Task<T>(request)
+        //    return request.;
+        //}
+        public Task<DetailedResponse<T>> AsAsync<T>(this IRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
+            DetailedResponse<T> detailedResponse = new DetailedResponse<T>();
             HttpResponseMessage message = await this.AsMessage().ConfigureAwait(false);
-            Task<T> task = new Task<T>(request, cancellationToken);
-            return task;
+            var result = message.Content.ReadAsStringAsync().Result;
+            detailedResponse.Result = await message.Content.ReadAsAsync<T>(this.Formatters).ConfigureAwait(false);
+
+            this.GetResponse(this.Dispatch.Value).Content
+
+            return T;
+            //throw new NotImplementedException();
         }
 
         private async Task<HttpResponseMessage> GetResponse(Task<HttpResponseMessage> request)
