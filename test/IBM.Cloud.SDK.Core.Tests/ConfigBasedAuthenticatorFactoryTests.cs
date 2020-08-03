@@ -16,13 +16,13 @@
 */
 
 
+using System;
+using System.Collections.Generic;
+using System.Text;
 using IBM.Cloud.SDK.Core.Authentication;
 using IBM.Cloud.SDK.Core.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IBM.Cloud.SDK.Core.Tests.ConfigBasedAuthenticatorFactoryTests
 {
@@ -38,8 +38,8 @@ namespace IBM.Cloud.SDK.Core.Tests.ConfigBasedAuthenticatorFactoryTests
             {
                 Credentials = new Credential()
                 {
-                    ApiKey = apikey
-                }
+                    ApiKey = apikey,
+                },
             };
             tempVcapCredential.Add("assistant", new List<VcapCredential>() { vcapCredential });
 
@@ -93,7 +93,8 @@ namespace IBM.Cloud.SDK.Core.Tests.ConfigBasedAuthenticatorFactoryTests
             Environment.SetEnvironmentVariable("TEST_SERVICE_AUTH_URL", null);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void TestBadAuthType()
         {
             Environment.SetEnvironmentVariable("TEST_SERVICE_AUTH_TYPE", "badAuthType");

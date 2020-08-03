@@ -28,13 +28,17 @@ namespace IBM.Cloud.SDK.Core.Http
         public static MediaTypeFormatter GetFormatter(MediaTypeFormatterCollection formatters, MediaTypeHeaderValue contentType = null)
         {
             if (!formatters.Any())
+            {
                 throw new InvalidOperationException("No MediaTypeFormatters are available on the fluent client.");
+            }
 
             MediaTypeFormatter formatter = contentType != null
                 ? formatters.FirstOrDefault(f => f.SupportedMediaTypes.Any(m => m.MediaType == contentType.MediaType))
                 : formatters.FirstOrDefault();
             if (formatter == null)
-                throw new InvalidOperationException(String.Format("No MediaTypeFormatters are available on the fluent client for the '{0}' content-type.", contentType));
+            {
+                throw new InvalidOperationException(string.Format("No MediaTypeFormatters are available on the fluent client for the '{0}' content-type.", contentType));
+            }
 
             return formatter;
         }

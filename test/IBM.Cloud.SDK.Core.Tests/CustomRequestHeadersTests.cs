@@ -15,11 +15,11 @@
 *
 */
 
+using System.Collections.Generic;
 using IBM.Cloud.SDK.Core.Http;
 using IBM.Cloud.SDK.Core.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using System.Collections.Generic;
 
 namespace IBM.Cloud.SDK.Core.Tests
 {

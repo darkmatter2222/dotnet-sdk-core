@@ -15,9 +15,9 @@
 *
 */
 
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace IBM.Cloud.SDK.Core.Model
 {

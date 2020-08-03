@@ -15,10 +15,10 @@
 *
 */
 
+using System.Collections.Generic;
 using IBM.Cloud.SDK.Core.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace IBM.Cloud.SDK.Core.Tests
 {
@@ -82,8 +82,8 @@ namespace IBM.Cloud.SDK.Core.Tests
             Dictionary<string, JToken> additionalProperties = dynamicModel.AdditionalProperties;
             Assert.IsTrue(additionalProperties == dynamicModel.AdditionalProperties);
         }
-        [TestMethod]
 
+        [TestMethod]
         public void TestAdd()
         {
             DynamicModel dynamicModel = new DynamicModel();

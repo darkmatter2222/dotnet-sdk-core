@@ -15,11 +15,11 @@
 *
 */
 
+using System;
 using IBM.Cloud.SDK.Core.Http;
 using IBM.Cloud.SDK.Core.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using System;
 
 namespace IBM.Cloud.SDK.Core.Tests
 {
@@ -31,7 +31,7 @@ namespace IBM.Cloud.SDK.Core.Tests
         {
             IClient client = new IBMHttpClient()
             {
-                ServiceUrl = "http://baseuri.com"
+                ServiceUrl = "http://baseuri.com",
             };
 
             var restRequest = client.GetAsync("/v1/operation");
@@ -41,7 +41,8 @@ namespace IBM.Cloud.SDK.Core.Tests
             Assert.IsTrue(restRequest.Message.RequestUri == new Uri("http://baseuri.com/v1/operation?myArg=Is+this+a+valid+arg%3F"));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void NoUrlTest()
         {
             IClient client = new IBMHttpClient();
@@ -53,7 +54,7 @@ namespace IBM.Cloud.SDK.Core.Tests
         {
             IClient client = new IBMHttpClient()
             {
-                ServiceUrl = "http://www.service-url.com"
+                ServiceUrl = "http://www.service-url.com",
             };
 
             var restRequest = client.GetAsync("/v1/operation");

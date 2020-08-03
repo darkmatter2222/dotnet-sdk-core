@@ -15,10 +15,10 @@
 *
 */
 
-using IBM.Cloud.SDK.Core.Model;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Text;
+using IBM.Cloud.SDK.Core.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IBM.Cloud.SDK.Core.Tests
 {
@@ -57,7 +57,7 @@ namespace IBM.Cloud.SDK.Core.Tests
             Assert.IsTrue(fileWithMetadata.Filename == fileName);
             Assert.IsTrue(fileWithMetadata.ContentType == fileContentType);
 
-            if(File.Exists(fileName))
+            if (File.Exists(fileName))
             {
                 File.Delete(fileName);
             }

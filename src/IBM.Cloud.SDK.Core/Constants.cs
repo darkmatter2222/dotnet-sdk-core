@@ -23,9 +23,9 @@ namespace IBM.Cloud.SDK.Core
     public class Constants
     {
         /// <summary>
-        /// The version number for this SDK build. Added to the header in 
+        /// The version number for this SDK build. Added to the header in
         /// each request as `User-Agent`.
         /// </summary>
-        public static readonly string CORE_VERSION = "1.1.0";
+        public static readonly string CoreVersion = "1.1.0";
     }
 }

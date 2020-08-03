@@ -22,14 +22,14 @@ namespace IBM.Cloud.SDK.Core.Authentication
     public interface IAuthenticator
     {
         /// <summary>
-        /// Validates the current set of configuration information in the Authenticator.
-        /// </summary>
-        void Validate();
-
-        /// <summary>
         /// Returns the authentication type associated with the AuthenticatorConfig instance.
         /// </summary>
         string AuthenticationType { get; }
+
+        /// <summary>
+        /// Validates the current set of configuration information in the Authenticator.
+        /// </summary>
+        void Validate();
 
         /// <summary>
         /// Perform the necessary authentication steps for the specified request.

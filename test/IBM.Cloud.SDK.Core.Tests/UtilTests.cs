@@ -15,10 +15,10 @@
 *
 */
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IBM.Cloud.SDK.Core.Util;
-using System.IO;
 using System.Globalization;
+using System.IO;
+using IBM.Cloud.SDK.Core.Util;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IBM.Cloud.SDK.Core.Tests.Util
 {
@@ -185,7 +185,7 @@ namespace IBM.Cloud.SDK.Core.Tests.Util
         [TestMethod]
         public void TestConvertToUtf8()
         {
-            var testString = "testString¼";
+            var testString = "testStringÂ¼";
             var utf8String = Utility.ConvertToUtf8(testString);
             Assert.IsTrue(!string.IsNullOrEmpty(utf8String));
         }

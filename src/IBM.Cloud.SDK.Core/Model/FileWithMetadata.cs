@@ -26,7 +26,7 @@ namespace IBM.Cloud.SDK.Core.Model
         /// The file data
         /// </summary>
         public System.IO.MemoryStream Data { get; set; }
-        
+
         /// <summary>
         /// The filename
         /// </summary>

@@ -23,14 +23,6 @@ namespace IBM.Cloud.SDK.Core.Http.Exceptions
 {
     public class ServiceResponseException : Exception
     {
-        public IBMError Error { get; set; }
-
-        public HttpStatusCode Status { get; protected set; }
-
-        public IResponse Response { get; protected set; }
-
-        public HttpResponseMessage ResponseMessage { get; protected set; }
-
         public ServiceResponseException(IResponse response, HttpResponseMessage responseMessage, string message, Exception innerException = null)
             : base(message, innerException)
         {
@@ -38,5 +30,13 @@ namespace IBM.Cloud.SDK.Core.Http.Exceptions
             this.ResponseMessage = responseMessage;
             this.Status = responseMessage.StatusCode;
         }
+
+        public IBMError Error { get; set; }
+
+        public HttpStatusCode Status { get; protected set; }
+
+        public IResponse Response { get; protected set; }
+
+        public HttpResponseMessage ResponseMessage { get; protected set; }
     }
 }

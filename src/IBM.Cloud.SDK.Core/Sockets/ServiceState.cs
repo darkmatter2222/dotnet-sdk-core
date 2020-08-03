@@ -22,6 +22,6 @@ namespace IBM.Cloud.SDK.Core.Sockets
     public class ServiceState
     {
         [JsonProperty("state")]
-        public string State = "";
+        public string State = string.Empty;
     }
 }

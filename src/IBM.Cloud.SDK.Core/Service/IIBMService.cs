@@ -25,7 +25,9 @@ namespace IBM.Cloud.SDK.Core.Service
         IClient Client { get; set; }
 
         string ServiceName { get; set; }
+
         void SetServiceUrl(string serviceUrl);
+
         IAuthenticator GetAuthenticator();
     }
 }
